@@ -9,6 +9,7 @@ export default function Home() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        fontFamily: "monospace",
       }}
     >
       <Link
@@ -18,7 +19,6 @@ export default function Home() {
           textDecoration: "none",
           border: "1px solid white",
           padding: "18px 36px",
-          fontFamily: "monospace",
           fontSize: "1.2rem",
           letterSpacing: "2px",
         }}
