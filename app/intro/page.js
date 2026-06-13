@@ -95,8 +95,8 @@ export default function Intro() {
         setPixels([]);
       }, 200);
 
-    }, 2000); // 🔥 EVERY 2 SECONDS (NOW WORKS PROPERLY)
-
+    }, 2000); // 
+<div className="particles" />
     return () => clearInterval(interval);
   }, [glitchStarted]);
 

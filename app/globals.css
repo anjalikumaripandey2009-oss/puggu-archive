@@ -18,3 +18,46 @@
   50% { opacity: 1; }
   100% { opacity: 0; }
 }
+body {
+  background: radial-gradient(circle at center, #05060a 0%, #000 60%, #000 100%);
+}
+
+/* moving noise layer */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.08;
+  pointer-events: none;
+  animation: grainMove 1s steps(2) infinite;
+}
+
+@keyframes grainMove {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(-2%, 2%); }
+}
+.particles {
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(white 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.05;
+  animation: floatParticles 20s linear infinite;
+}
+
+@keyframes floatParticles {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-200px); }
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  opacity: 0.2;
+}
