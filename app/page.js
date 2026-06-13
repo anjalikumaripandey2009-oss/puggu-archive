@@ -11,46 +11,27 @@ export default function Home() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        textAlign: "center",
         fontFamily: "monospace",
-        padding: "20px",
+        textAlign: "center",
       }}
     >
-      <h3>ARCHIVE STATUS: DECLASSIFIED</h3>
+      <h3 style={{ opacity: 0.7 }}>
+        Version 18.0
+      </h3>
 
-      <div style={{ maxWidth: "700px", marginTop: "30px" }}>
-        <p>Researchers discovered an unusual subject.</p>
-
-        <br />
-
-        <p>Historical records are currently being reconstructed.</p>
-
-        <br />
-
-        <p>[ STORY SEQUENCE UNDER DEVELOPMENT ]</p>
-      </div>
-
-      <div style={{ marginTop: "60px" }}>
-        <h1>SUBJECT: PUGGU</h1>
-
-        <p style={{ marginTop: "15px" }}>
-          Archive access granted.
-        </p>
-
-        <Link
-          href="/archiveMap"
-          style={{
-            display: "inline-block",
-            marginTop: "25px",
-            padding: "12px 24px",
-            border: "1px solid white",
-            color: "white",
-            textDecoration: "none",
-          }}
-        >
-          ENTER ARCHIVE
-        </Link>
-      </div>
+      <Link
+        href="/intro"
+        style={{
+          marginTop: "30px",
+          padding: "15px 35px",
+          border: "1px solid white",
+          color: "white",
+          textDecoration: "none",
+          fontSize: "1.2rem",
+        }}
+      >
+        START BDAY SIMULATION
+      </Link>
     </main>
   );
 }
