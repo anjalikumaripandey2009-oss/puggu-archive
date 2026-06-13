@@ -21,9 +21,7 @@ export default function Intro() {
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
 
-  // 🔥 FIXED STATES
-  const [glitchStarted, setGlitchStarted] = useState(false);
-  const [glitchActive, setGlitchActive] = useState(false);
+  const [glitch, setGlitch] = useState(false);
   const [pixels, setPixels] = useState([]);
 
   // ================= TYPEWRITER =================
@@ -53,74 +51,64 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // ================= START AFTER 5s =================
+  // ================= GLITCH SYSTEM =================
   useEffect(() => {
-    const t = setTimeout(() => {
-      setGlitchStarted(true);
+    const start = setTimeout(() => {
+      const interval = setInterval(() => {
+        setGlitch(true);
+
+        const newPixels = Array.from({ length: 16 }).map(() => ({
+          top: Math.random() * 100 + "%",
+          left: Math.random() * 100 + "%",
+          width: Math.random() * 40 + 6 + "px",
+          height: Math.random() * 6 + 2 + "px",
+          background: [
+            "rgba(148,0,211,0.6)", // Violet
+            "rgba(75,0,130,0.6)",  // Indigo
+            "rgba(0,0,255,0.6)",   // Blue
+            "rgba(0,255,0,0.5)",   // Green
+            "rgba(255,255,0,0.5)", // Yellow
+            "rgba(255,127,0,0.5)", // Orange
+            "rgba(255,0,0,0.55)",  // Red
+          ][Math.floor(Math.random() * 7)],
+        }));
+
+        setPixels(newPixels);
+
+        setTimeout(() => {
+          setGlitch(false);
+          setPixels([]);
+        }, 180);
+      }, 2000);
+
+      return () => clearInterval(interval);
     }, 5000);
 
-    return () => clearTimeout(t);
+    return () => clearTimeout(start);
   }, []);
 
-  // ================= REAL REPEATING GLITCH =================
-  useEffect(() => {
-    if (!glitchStarted) return;
-
-    const interval = setInterval(() => {
-      // TURN ON GLITCH BURST
-      setGlitchActive(true);
-
-      // VIBGYOR PIXELS
-      const newPixels = Array.from({ length: 16 }).map(() => ({
-        top: Math.random() * 100 + "%",
-        left: Math.random() * 100 + "%",
-        width: Math.random() * 40 + 6 + "px",
-        height: Math.random() * 6 + 2 + "px",
-        background: [
-          "rgba(148,0,211,0.6)",
-          "rgba(75,0,130,0.6)",
-          "rgba(0,0,255,0.6)",
-          "rgba(0,255,0,0.5)",
-          "rgba(255,255,0,0.5)",
-          "rgba(255,127,0,0.5)",
-          "rgba(255,0,0,0.55)",
-        ][Math.floor(Math.random() * 7)],
-      }));
-
-      setPixels(newPixels);
-
-      // TURN OFF AFTER BURST
-      setTimeout(() => {
-        setGlitchActive(false);
-        setPixels([]);
-      }, 200);
-
-    }, 2000); // 
-<div className="particles" />
-    return () => clearInterval(interval);
-  }, [glitchStarted]);
-
   return (
-    <main
-      style={{
-        ...styles.wrapper,
-        transform: glitchActive
-          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
-          : "none",
-        filter: glitchActive
-          ? "contrast(1.8) brightness(1.4) saturate(1.6)"
-          : "none",
-      }}
-    >
-      {/* PIXEL GLITCH */}
+    <main style={styles.wrapper}>
+      {/* 🌌 BACKGROUND LAYER (FIXED, ALWAYS VISIBLE) */}
+      <div className="bg-layer" />
+
+      {/* ⚡ GLITCH PIXELS */}
       {pixels.map((p, i) => (
         <div key={i} style={{ ...styles.pixel, ...p }} />
       ))}
 
-      {/* OVERLAY */}
-      {glitchActive && <div style={styles.overlay} />}
-
-      <div style={styles.container}>
+      {/* CONTENT */}
+      <div
+        style={{
+          ...styles.container,
+          transform: glitch
+            ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
+            : "none",
+          filter: glitch
+            ? "contrast(1.8) brightness(1.4) saturate(1.6)"
+            : "none",
+        }}
+      >
         <pre style={styles.text}>
           {text}
           <span style={styles.cursor}>█</span>
@@ -141,14 +129,14 @@ export default function Intro() {
 const styles = {
   wrapper: {
     minHeight: "100vh",
-    background: "black",
+    background: "#000",
     color: "#cbd5e1",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "monospace",
     overflow: "hidden",
-    transition: "transform 0.08s ease",
+    position: "relative",
   },
 
   container: {
@@ -189,14 +177,5 @@ const styles = {
     pointerEvents: "none",
     opacity: 0.95,
     filter: "blur(0.4px)",
-  },
-
-  overlay: {
-    position: "fixed",
-    inset: 0,
-    background:
-      "linear-gradient(90deg, rgba(255,255,255,0.04), transparent, rgba(255,255,255,0.02))",
-    zIndex: 998,
-    pointerEvents: "none",
   },
 };
