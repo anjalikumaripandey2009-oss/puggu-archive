@@ -15,7 +15,7 @@ const lines = [
   "SUBJECT: PUGGU",
 ];
 
-// ================= BACKGROUND (FIXED BIG PARTICLES) =================
+// ================= BACKGROUND =================
 function Background() {
   const canvasRef = useRef(null);
 
@@ -26,16 +26,12 @@ function Background() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // 🔥 BIG + VISIBLE PARTICLES (FIXED)
     const particles = Array.from({ length: 60 }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height,
       vx: (Math.random() - 0.5) * 0.8,
       vy: (Math.random() - 0.5) * 0.8,
-
-      // ⭐ FIX: bigger visible particles
-      size: Math.random() * 6 + 4, // 4px → 10px
-
+      size: Math.random() * 6 + 4,
       color:
         Math.random() > 0.5
           ? "rgba(0,255,255,0.9)"
@@ -45,7 +41,6 @@ function Background() {
     function animate() {
       ctx.clearRect(0, 0, width, height);
 
-      // dark base
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, width, height);
 
@@ -53,20 +48,17 @@ function Background() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // wrap around screen
         if (p.x < 0) p.x = width;
         if (p.x > width) p.x = 0;
         if (p.y < 0) p.y = height;
         if (p.y > height) p.y = 0;
 
-        // 🔥 DRAW GLOWING ORBS
         ctx.beginPath();
         ctx.fillStyle = p.color;
-
         ctx.shadowBlur = 20;
         ctx.shadowColor = p.color;
-
         ctx.globalAlpha = 0.95;
+
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
       }
@@ -88,16 +80,12 @@ function Background() {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 0,
-      }}
+      style={{ position: "fixed", inset: 0, zIndex: 0 }}
     />
   );
 }
 
-// ================= MAIN INTRO =================
+// ================= MAIN =================
 export default function Intro() {
   const [text, setText] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -134,26 +122,31 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // GLITCH SYSTEM
+  // ================= GLITCH SYSTEM (FIXED BIG BLOCKS) =================
   useEffect(() => {
     const start = setTimeout(() => {
       const interval = setInterval(() => {
         setGlitch(true);
 
-        const newPixels = Array.from({ length: 14 }).map(() => ({
+        const newPixels = Array.from({ length: 10 }).map(() => ({
           top: Math.random() * 100,
           left: Math.random() * 100,
-          width: Math.random() * 40 + 6,
-          height: Math.random() * 6 + 2,
+
+          // 🔥 BIG GLITCH BLOCKS (IMPORTANT CHANGE)
+          width: Math.random() * 120 + 60,   // 60px → 180px
+          height: Math.random() * 18 + 10,    // 10px → 28px
+
           color: [
-            "rgba(148,0,211,0.7)",
-            "rgba(75,0,130,0.7)",
-            "rgba(0,0,255,0.7)",
-            "rgba(0,255,0,0.6)",
-            "rgba(255,255,0,0.6)",
-            "rgba(255,127,0,0.6)",
-            "rgba(255,0,0,0.6)",
+            "rgba(148,0,211,0.75)",
+            "rgba(75,0,130,0.75)",
+            "rgba(0,0,255,0.75)",
+            "rgba(0,255,0,0.65)",
+            "rgba(255,255,0,0.65)",
+            "rgba(255,127,0,0.65)",
+            "rgba(255,0,0,0.65)",
           ][Math.floor(Math.random() * 7)],
+
+          opacity: Math.random() * 0.5 + 0.4,
         }));
 
         setPixels(newPixels);
@@ -161,7 +154,7 @@ export default function Intro() {
         setTimeout(() => {
           setGlitch(false);
           setPixels([]);
-        }, 180);
+        }, 220);
       }, 2000);
 
       return () => clearInterval(interval);
@@ -172,10 +165,9 @@ export default function Intro() {
 
   return (
     <main style={styles.wrapper}>
-      {/* BACKGROUND */}
       <Background />
 
-      {/* PIXELS */}
+      {/* GLITCH BLOCKS */}
       {pixels.map((p, i) => (
         <div
           key={i}
@@ -186,6 +178,7 @@ export default function Intro() {
             width: p.width + "px",
             height: p.height + "px",
             background: p.color,
+            opacity: p.opacity,
           }}
         />
       ))}
@@ -198,7 +191,7 @@ export default function Intro() {
             ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
             : "none",
           filter: glitch
-            ? "contrast(1.8) brightness(1.4) saturate(1.6)"
+            ? "contrast(2) brightness(1.5) saturate(1.7)"
             : "none",
         }}
       >
@@ -267,7 +260,6 @@ const styles = {
     position: "fixed",
     zIndex: 999,
     pointerEvents: "none",
-    opacity: 0.9,
-    filter: "blur(0.4px)",
+    filter: "blur(0.3px)",
   },
 };
