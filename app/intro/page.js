@@ -1,54 +1,90 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
+const lines = [
+  "// SYSTEM INITIALIZATION COMPLETE",
+  "A restricted archive node has been accessed.",
+  "Signal integrity: unstable.",
+  "Recovered fragments are incomplete.",
+  "Memory layers appear corrupted or missing.",
+  "",
+  "A single stable identifier has been detected.",
+  "",
+  "SUBJECT: PUGGU",
+];
+
 export default function Intro() {
+  const [displayedLines, setDisplayedLines] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    if (index < lines.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedLines((prev) => [...prev, lines[index]]);
+        setIndex(index + 1);
+      }, 600);
+
+      return () => clearTimeout(timeout);
+    } else {
+      setTimeout(() => setShowButton(true), 800);
+    }
+  }, [index]);
+
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "black",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "monospace",
-        textAlign: "center",
-        padding: "20px",
-      }}
-    >
-      <h3>ARCHIVE STATUS: DECLASSIFIED</h3>
+    <main style={styles.wrapper}>
+      <div style={styles.container}>
+        {displayedLines.map((line, i) => (
+          <p key={i} style={styles.text}>
+            {line}
+          </p>
+        ))}
 
-      <div style={{ maxWidth: "700px", marginTop: "30px" }}>
-        <p>Researchers discovered an unusual subject.</p>
-
-        <br />
-
-        <p>
-          Historical records are currently being reconstructed.
-        </p>
-
-        <br />
-
-        <p>[ STORY SEQUENCE UNDER DEVELOPMENT ]</p>
-      </div>
-
-      <div style={{ marginTop: "60px" }}>
-        <h1>SUBJECT: PUGGU</h1>
-
-        <Link
-          href="/archiveMap"
-          style={{
-            display: "inline-block",
-            marginTop: "25px",
-            padding: "12px 24px",
-            border: "1px solid white",
-            color: "white",
-            textDecoration: "none",
-          }}
-        >
-          ENTER ARCHIVE
-        </Link>
+        {showButton && (
+          <div style={styles.buttonWrapper}>
+            <Link href="/archiveMap" style={styles.button}>
+              ENTER ARCHIVE
+            </Link>
+          </div>
+        )}
       </div>
     </main>
   );
 }
+
+const styles = {
+  wrapper: {
+    minHeight: "100vh",
+    background: "black",
+    color: "#cbd5e1",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "monospace",
+    textAlign: "center",
+    padding: "20px",
+  },
+  container: {
+    maxWidth: "800px",
+  },
+  text: {
+    margin: "8px 0",
+    opacity: 0.85,
+    animation: "flicker 1.5s infinite alternate",
+  },
+  buttonWrapper: {
+    marginTop: "40px",
+    animation: "spawn 1.2s ease-out",
+  },
+  button: {
+    padding: "14px 26px",
+    border: "1px solid #9ca3af",
+    color: "white",
+    textDecoration: "none",
+    letterSpacing: "2px",
+    display: "inline-block",
+    animation: "glow 2s infinite alternate",
+  },
+};
