@@ -60,7 +60,7 @@ export default function Intro() {
     return () => clearTimeout(t);
   }, []);
 
-  // ================= GLITCH LOOP =================
+  // ================= REPEATING GLITCH EVERY 2s =================
   useEffect(() => {
     if (!glitchOn) return;
 
@@ -90,7 +90,7 @@ export default function Intro() {
         setGlitchOn(false);
         setPixels([]);
       }, 180);
-    }, 1200);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [glitchOn]);
@@ -107,12 +107,12 @@ export default function Intro() {
           : "none",
       }}
     >
-      {/* PIXEL CORRUPTION BLOCKS */}
+      {/* PIXEL GLITCH BLOCKS */}
       {pixels.map((p, i) => (
         <div key={i} style={{ ...styles.pixel, ...p }} />
       ))}
 
-      {/* GLITCH OVERLAY */}
+      {/* OVERLAY */}
       {glitchOn && <div style={styles.overlay} />}
 
       <div style={styles.container}>
