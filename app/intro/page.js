@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const text = [
+const lines = [
   "// SYSTEM INITIALIZATION COMPLETE",
   "A restricted archive node has been accessed.",
   "Signal integrity unstable.",
@@ -16,34 +16,32 @@ const text = [
 ];
 
 export default function Intro() {
-  const [displayedText, setDisplayedText] = useState("");
+  const [text, setText] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
 
-  // TYPEWRITER (CHAR BY CHAR)
   useEffect(() => {
-    if (lineIndex >= text.length) {
-      setTimeout(() => setShowButton(true), 600);
+    if (lineIndex >= lines.length) {
+      setTimeout(() => setShowButton(true), 800);
       return;
     }
 
-    const currentLine = text[lineIndex];
+    const currentLine = lines[lineIndex];
 
     if (charIndex < currentLine.length) {
       const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + currentLine[charIndex]);
+        setText((prev) => prev + currentLine[charIndex]);
         setCharIndex(charIndex + 1);
-      }, 35);
+      }, 28); // typing speed
 
       return () => clearTimeout(timeout);
     } else {
-      // move to next line
       const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + "\n");
+        setText((prev) => prev + "\n");
         setLineIndex(lineIndex + 1);
         setCharIndex(0);
-      }, 300);
+      }, 180);
 
       return () => clearTimeout(timeout);
     }
@@ -51,18 +49,20 @@ export default function Intro() {
 
   return (
     <main style={styles.wrapper}>
-      <pre style={styles.text}>
-        {displayedText}
-        <span style={styles.cursor}>█</span>
-      </pre>
+      <div style={styles.container}>
+        <pre style={styles.text}>
+          {text}
+          <span style={styles.cursor}>█</span>
+        </pre>
 
-      {showButton && (
-        <div style={styles.buttonWrapper}>
-          <Link href="/archiveMap" style={styles.button}>
-            ENTER ARCHIVE
-          </Link>
-        </div>
-      )}
+        {showButton && (
+          <div style={styles.buttonWrapper}>
+            <Link href="/archiveMap" style={styles.button}>
+              ENTER ARCHIVE
+            </Link>
+          </div>
+        )}
+      </div>
     </main>
   );
 }
@@ -73,25 +73,27 @@ const styles = {
     background: "black",
     color: "#cbd5e1",
     display: "flex",
-    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "monospace",
+    padding: "20px",
+  },
+  container: {
+    maxWidth: "800px",
     textAlign: "left",
-    padding: "30px",
   },
   text: {
     whiteSpace: "pre-wrap",
     fontSize: "14px",
     lineHeight: "1.8",
-    maxWidth: "800px",
   },
   cursor: {
     animation: "blink 0.8s infinite",
   },
   buttonWrapper: {
-    marginTop: "40px",
+    marginTop: "50px",
     animation: "spawn 1.2s ease-out",
+    textAlign: "center",
   },
   button: {
     padding: "14px 26px",
@@ -100,6 +102,6 @@ const styles = {
     textDecoration: "none",
     letterSpacing: "2px",
     display: "inline-block",
-    animation: "growIn 0.8s ease-out",
+    animation: "glow 2s infinite alternate",
   },
 };
