@@ -22,6 +22,7 @@ export default function Intro() {
   const [showButton, setShowButton] = useState(false);
 
   const [glitch, setGlitch] = useState(false);
+  const [startGlitch, setStartGlitch] = useState(false);
 
   // TYPEWRITER
   useEffect(() => {
@@ -44,38 +45,52 @@ export default function Intro() {
         setText((prev) => prev + "\n");
         setLineIndex(lineIndex + 1);
         setCharIndex(0);
-      }, 150);
+      }, 120);
 
       return () => clearTimeout(t);
     }
   }, [charIndex, lineIndex]);
 
-  // CONSTANT GLITCH EVERY 10 SECONDS
+  // START GLITCH AFTER 5 SECONDS
   useEffect(() => {
-    const interval = setInterval(() => {
-      setGlitch(true);
+    const t = setTimeout(() => {
+      setStartGlitch(true);
+    }, 5000);
 
-      setTimeout(() => {
-        setGlitch(false);
-      }, 300); // glitch duration
-    }, 10000); // every 10 seconds
+    return () => clearTimeout(t);
+  }, []);
+
+  // RANDOM GLITCH WHILE TYPING (only after 5s)
+  useEffect(() => {
+    if (!startGlitch) return;
+
+    const interval = setInterval(() => {
+      const chance = Math.random();
+
+      if (chance < 0.7) {
+        setGlitch(true);
+        setTimeout(() => setGlitch(false), 150);
+      }
+    }, 800);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [startGlitch]);
 
   return (
     <main
       style={{
         ...styles.wrapper,
         transform: glitch
-          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
-          : "translate(0px, 0px)",
+          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 3 - 1}px)`
+          : "translate(0px,0px)",
         filter: glitch
-          ? "contrast(1.6) brightness(1.4)"
+          ? "contrast(1.8) brightness(1.3) saturate(1.5)"
           : "none",
       }}
     >
-      {glitch && <div style={styles.glitchOverlay} />}
+      {/* PIXEL GLITCH LAYERS */}
+      {glitch && <div style={styles.noise} />}
+      {glitch && <div style={styles.rgbSplit} />}
 
       <div style={styles.container}>
         <pre style={styles.text}>
@@ -85,12 +100,6 @@ export default function Intro() {
 
         {showButton && (
           <div style={styles.buttonWrapper}>
-            <div style={styles.sparkles}>
-              <span style={styles.spark1}></span>
-              <span style={styles.spark2}></span>
-              <span style={styles.spark3}></span>
-            </div>
-
             <Link href="/archiveMap" style={styles.button}>
               ENTER ARCHIVE
             </Link>
@@ -110,13 +119,15 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "monospace",
-    padding: "20px",
-    transition: "transform 0.1s ease",
+    overflow: "hidden",
+    transition: "transform 0.08s ease",
   },
 
   container: {
     maxWidth: "800px",
     textAlign: "left",
+    position: "relative",
+    zIndex: 2,
   },
 
   text: {
@@ -132,7 +143,6 @@ const styles = {
   buttonWrapper: {
     marginTop: "50px",
     textAlign: "center",
-    position: "relative",
     animation: "spawn 1.2s ease-out",
   },
 
@@ -144,62 +154,28 @@ const styles = {
     letterSpacing: "2px",
     display: "inline-block",
     animation: "glow 2s infinite alternate",
-    position: "relative",
-    zIndex: 2,
   },
 
-  sparkles: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    top: "-20px",
-    left: 0,
-    pointerEvents: "none",
-  },
+  /* ===== GLITCH EFFECTS ===== */
 
-  spark1: {
-    position: "absolute",
-    width: "3px",
-    height: "3px",
-    background: "white",
-    borderRadius: "50%",
-    top: "10px",
-    left: "40%",
-    animation: "twinkle 1.2s infinite",
-  },
-
-  spark2: {
-    position: "absolute",
-    width: "2px",
-    height: "2px",
-    background: "white",
-    borderRadius: "50%",
-    top: "30px",
-    left: "60%",
-    animation: "twinkle 1.6s infinite",
-  },
-
-  spark3: {
-    position: "absolute",
-    width: "2px",
-    height: "2px",
-    background: "white",
-    borderRadius: "50%",
-    top: "15px",
-    left: "70%",
-    animation: "twinkle 1.4s infinite",
-  },
-
-  glitchOverlay: {
+  noise: {
     position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
+    inset: 0,
     background:
-      "linear-gradient(90deg, rgba(255,255,255,0.05), transparent, rgba(255,255,255,0.03))",
+      "repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, transparent 2px)",
+    opacity: 0.2,
     pointerEvents: "none",
     zIndex: 999,
-    animation: "flicker 0.15s linear",
+  },
+
+  rgbSplit: {
+    position: "fixed",
+    inset: 0,
+    background:
+      "linear-gradient(90deg, rgba(255,0,0,0.08), rgba(0,255,255,0.08), rgba(255,255,255,0.05))",
+    mixBlendMode: "screen",
+    opacity: 0.25,
+    pointerEvents: "none",
+    zIndex: 998,
   },
 };
