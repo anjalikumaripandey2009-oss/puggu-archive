@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const lines = [
@@ -15,42 +15,82 @@ const lines = [
   "SUBJECT: PUGGU",
 ];
 
-// simple background dots
+// ================= CANVAS BACKGROUND =================
 function Background() {
-  const [dots, setDots] = useState([]);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
-    const arr = Array.from({ length: 60 }).map(() => ({
-      top: Math.random() * 100,
-      left: Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      opacity: Math.random() * 0.3,
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const particles = Array.from({ length: 70 }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
+      size: Math.random() * 3 + 2,
+      color: Math.random() > 0.5
+        ? "rgba(0,255,255,0.8)"
+        : "rgba(255,255,255,0.6)",
     }));
 
-    setDots(arr);
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      // dark background
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, width, height);
+
+      for (let p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // wrap
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        // draw particle
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = p.color;
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <div style={styles.bg}>
-      {dots.map((d, i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            top: d.top + "%",
-            left: d.left + "%",
-            width: d.size + "px",
-            height: d.size + "px",
-            background: "rgba(0,255,255,0.6)",
-            opacity: d.opacity,
-            borderRadius: "50%",
-          }}
-        />
-      ))}
-    </div>
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 0,
+      }}
+    />
   );
 }
 
+// ================= MAIN =================
 export default function Intro() {
   const [text, setText] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -87,13 +127,13 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // GLITCH SYSTEM (WORKING)
+  // GLITCH SYSTEM (STABLE)
   useEffect(() => {
     const start = setTimeout(() => {
       const interval = setInterval(() => {
         setGlitch(true);
 
-        const newPixels = Array.from({ length: 18 }).map(() => ({
+        const newPixels = Array.from({ length: 14 }).map(() => ({
           top: Math.random() * 100,
           left: Math.random() * 100,
           width: Math.random() * 40 + 6,
@@ -125,7 +165,7 @@ export default function Intro() {
 
   return (
     <main style={styles.wrapper}>
-      {/* 🌌 REAL BACKGROUND (FOR SURE VISIBLE) */}
+      {/* 🌌 BACKGROUND CANVAS */}
       <Background />
 
       {/* PIXELS */}
@@ -172,6 +212,7 @@ export default function Intro() {
   );
 }
 
+// ================= STYLES =================
 const styles = {
   wrapper: {
     minHeight: "100vh",
@@ -183,13 +224,6 @@ const styles = {
     fontFamily: "monospace",
     overflow: "hidden",
     position: "relative",
-  },
-
-  bg: {
-    position: "fixed",
-    inset: 0,
-    background: "radial-gradient(circle, #05060a 0%, #000 70%)",
-    zIndex: 0,
   },
 
   container: {
@@ -219,6 +253,7 @@ const styles = {
     color: "white",
     textDecoration: "none",
     letterSpacing: "2px",
+    display: "inline-block",
   },
 
   pixel: {
