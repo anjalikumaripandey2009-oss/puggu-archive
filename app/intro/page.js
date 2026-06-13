@@ -21,28 +21,28 @@ export default function Intro() {
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
 
-  const [glitch, setGlitch] = useState(false);
+  const [glitchActive, setGlitchActive] = useState(false);
   const [pixels, setPixels] = useState([]);
 
-  // ===== TYPEWRITER =====
+  // ===== TYPEWRITER (UNCHANGED LOGIC) =====
   useEffect(() => {
     if (lineIndex >= lines.length) {
       const t = setTimeout(() => setShowButton(true), 800);
       return () => clearTimeout(t);
     }
 
-    const currentLine = lines[lineIndex];
+    const current = lines[lineIndex];
 
-    if (charIndex < currentLine.length) {
+    if (charIndex < current.length) {
       const t = setTimeout(() => {
-        setText((prev) => prev + currentLine[charIndex]);
+        setText((p) => p + current[charIndex]);
         setCharIndex(charIndex + 1);
       }, 28);
 
       return () => clearTimeout(t);
     } else {
       const t = setTimeout(() => {
-        setText((prev) => prev + "\n");
+        setText((p) => p + "\n");
         setLineIndex(lineIndex + 1);
         setCharIndex(0);
       }, 120);
@@ -51,56 +51,58 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // ===== START GLITCH AFTER 5 SECONDS =====
+  // ===== GLITCH START (GUARANTEED AFTER 5s) =====
   useEffect(() => {
     const start = setTimeout(() => {
-      setGlitch(true);
+      setGlitchActive(true);
     }, 5000);
 
     return () => clearTimeout(start);
   }, []);
 
-  // ===== CONTINUOUS GLITCH LOOP =====
+  // ===== GLITCH ENGINE (CLEAN + STABLE) =====
   useEffect(() => {
-    if (!glitch) return;
+    if (!glitchActive) return;
 
     const interval = setInterval(() => {
-      setGlitch(true);
+      // turn glitch ON
+      setGlitchActive(true);
 
-      // pixel burst generator
-      const newPixels = Array.from({ length: 10 }).map(() => ({
+      // generate pixel corruption
+      const newPixels = Array.from({ length: 12 }).map(() => ({
         top: Math.random() * 100 + "%",
         left: Math.random() * 100 + "%",
-        width: Math.random() * 30 + 6 + "px",
+        width: Math.random() * 40 + 10 + "px",
         height: Math.random() * 6 + 2 + "px",
-        color: [
-          "rgba(255,0,0,0.4)",
-          "rgba(0,255,255,0.4)",
+        background: [
+          "rgba(255,0,0,0.5)",
+          "rgba(0,255,255,0.5)",
           "rgba(255,255,255,0.3)",
-          "rgba(255,255,0,0.25)",
+          "rgba(255,255,0,0.3)",
         ][Math.floor(Math.random() * 4)],
       }));
 
       setPixels(newPixels);
 
+      // turn glitch OFF after burst
       setTimeout(() => {
-        setGlitch(false);
+        setGlitchActive(false);
         setPixels([]);
-      }, 220);
+      }, 200);
     }, 1200);
 
     return () => clearInterval(interval);
-  }, [glitch]);
+  }, [glitchActive]);
 
   return (
     <main
       style={{
         ...styles.wrapper,
-        transform: glitch
-          ? `translate(${Math.random() * 5 - 2.5}px, ${Math.random() * 2 - 1}px)`
-          : "translate(0px,0px)",
-        filter: glitch
-          ? "contrast(1.7) brightness(1.3) saturate(1.5)"
+        transform: glitchActive
+          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
+          : "none",
+        filter: glitchActive
+          ? "contrast(1.7) brightness(1.3) saturate(1.4)"
           : "none",
       }}
     >
@@ -109,8 +111,8 @@ export default function Intro() {
         <div key={i} style={{ ...styles.pixel, ...p }} />
       ))}
 
-      {/* GLITCH OVERLAY */}
-      {glitch && <div style={styles.glitchOverlay} />}
+      {/* subtle overlay */}
+      {glitchActive && <div style={styles.overlay} />}
 
       <div style={styles.container}>
         <pre style={styles.text}>
@@ -184,12 +186,12 @@ const styles = {
     filter: "blur(0.4px)",
   },
 
-  glitchOverlay: {
+  overlay: {
     position: "fixed",
     inset: 0,
     background:
-      "linear-gradient(90deg, rgba(255,255,255,0.05), transparent, rgba(255,255,255,0.03))",
-    pointerEvents: "none",
+      "linear-gradient(90deg, rgba(255,255,255,0.04), transparent, rgba(255,255,255,0.02))",
     zIndex: 998,
+    pointerEvents: "none",
   },
 };
