@@ -15,6 +15,42 @@ const lines = [
   "SUBJECT: PUGGU",
 ];
 
+// simple background dots
+function Background() {
+  const [dots, setDots] = useState([]);
+
+  useEffect(() => {
+    const arr = Array.from({ length: 60 }).map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.3,
+    }));
+
+    setDots(arr);
+  }, []);
+
+  return (
+    <div style={styles.bg}>
+      {dots.map((d, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            top: d.top + "%",
+            left: d.left + "%",
+            width: d.size + "px",
+            height: d.size + "px",
+            background: "rgba(0,255,255,0.6)",
+            opacity: d.opacity,
+            borderRadius: "50%",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Intro() {
   const [text, setText] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -24,7 +60,7 @@ export default function Intro() {
   const [glitch, setGlitch] = useState(false);
   const [pixels, setPixels] = useState([]);
 
-  // ================= TYPEWRITER =================
+  // TYPEWRITER
   useEffect(() => {
     if (lineIndex >= lines.length) {
       const t = setTimeout(() => setShowButton(true), 800);
@@ -51,25 +87,25 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // ================= GLITCH SYSTEM =================
+  // GLITCH SYSTEM (WORKING)
   useEffect(() => {
     const start = setTimeout(() => {
       const interval = setInterval(() => {
         setGlitch(true);
 
-        const newPixels = Array.from({ length: 16 }).map(() => ({
-          top: Math.random() * 100 + "%",
-          left: Math.random() * 100 + "%",
-          width: Math.random() * 40 + 6 + "px",
-          height: Math.random() * 6 + 2 + "px",
-          background: [
-            "rgba(148,0,211,0.6)", // Violet
-            "rgba(75,0,130,0.6)",  // Indigo
-            "rgba(0,0,255,0.6)",   // Blue
-            "rgba(0,255,0,0.5)",   // Green
-            "rgba(255,255,0,0.5)", // Yellow
-            "rgba(255,127,0,0.5)", // Orange
-            "rgba(255,0,0,0.55)",  // Red
+        const newPixels = Array.from({ length: 18 }).map(() => ({
+          top: Math.random() * 100,
+          left: Math.random() * 100,
+          width: Math.random() * 40 + 6,
+          height: Math.random() * 6 + 2,
+          color: [
+            "rgba(148,0,211,0.7)",
+            "rgba(75,0,130,0.7)",
+            "rgba(0,0,255,0.7)",
+            "rgba(0,255,0,0.6)",
+            "rgba(255,255,0,0.6)",
+            "rgba(255,127,0,0.6)",
+            "rgba(255,0,0,0.6)",
           ][Math.floor(Math.random() * 7)],
         }));
 
@@ -89,12 +125,22 @@ export default function Intro() {
 
   return (
     <main style={styles.wrapper}>
-      {/* 🌌 BACKGROUND LAYER (FIXED, ALWAYS VISIBLE) */}
-      <div className="bg-layer" />
+      {/* 🌌 REAL BACKGROUND (FOR SURE VISIBLE) */}
+      <Background />
 
-      {/* ⚡ GLITCH PIXELS */}
+      {/* PIXELS */}
       {pixels.map((p, i) => (
-        <div key={i} style={{ ...styles.pixel, ...p }} />
+        <div
+          key={i}
+          style={{
+            ...styles.pixel,
+            top: p.top + "%",
+            left: p.left + "%",
+            width: p.width + "px",
+            height: p.height + "px",
+            background: p.color,
+          }}
+        />
       ))}
 
       {/* CONTENT */}
@@ -139,6 +185,13 @@ const styles = {
     position: "relative",
   },
 
+  bg: {
+    position: "fixed",
+    inset: 0,
+    background: "radial-gradient(circle, #05060a 0%, #000 70%)",
+    zIndex: 0,
+  },
+
   container: {
     maxWidth: "800px",
     position: "relative",
@@ -158,7 +211,6 @@ const styles = {
   buttonWrapper: {
     marginTop: "50px",
     textAlign: "center",
-    animation: "spawn 1s ease-out",
   },
 
   button: {
@@ -167,15 +219,13 @@ const styles = {
     color: "white",
     textDecoration: "none",
     letterSpacing: "2px",
-    display: "inline-block",
-    animation: "glow 2s infinite alternate",
   },
 
   pixel: {
     position: "fixed",
     zIndex: 999,
     pointerEvents: "none",
-    opacity: 0.95,
+    opacity: 0.9,
     filter: "blur(0.4px)",
   },
 };
