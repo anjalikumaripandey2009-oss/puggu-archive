@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function Intro() {
   return (
     <main
       style={{
@@ -8,23 +8,25 @@ export default function Home() {
         background: "black",
         color: "white",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         fontFamily: "monospace",
       }}
     >
+      <h1>SUBJECT: PUGGU</h1>
+
       <Link
-        href="/intro"
+        href="/archiveMap"
         style={{
-          padding: "18px 40px",
+          marginTop: "30px",
+          padding: "12px 24px",
           border: "1px solid white",
           color: "white",
           textDecoration: "none",
-          fontSize: "1.2rem",
-          letterSpacing: "2px",
         }}
       >
-        START BDAY SIMULATION
+        ENTER ARCHIVE
       </Link>
     </main>
   );
