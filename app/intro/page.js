@@ -21,10 +21,7 @@ export default function Intro() {
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
 
-  // OLD GLITCH (kept)
   const [glitch, setGlitch] = useState(false);
-
-  // NEW PIXEL CORRUPTION
   const [pixels, setPixels] = useState([]);
 
   // ===== TYPEWRITER =====
@@ -54,48 +51,43 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // ===== OLD GLITCH (KEPT SAME BEHAVIOR) =====
+  // ===== START GLITCH AFTER 5 SECONDS =====
   useEffect(() => {
-    const t = setTimeout(() => {
+    const start = setTimeout(() => {
       setGlitch(true);
     }, 5000);
 
-    return () => clearTimeout(t);
+    return () => clearTimeout(start);
   }, []);
 
+  // ===== CONTINUOUS GLITCH LOOP =====
   useEffect(() => {
     if (!glitch) return;
 
     const interval = setInterval(() => {
       setGlitch(true);
-      setTimeout(() => setGlitch(false), 150);
-    }, 800);
 
-    return () => clearInterval(interval);
-  }, [glitch]);
-
-  // ===== NEW PIXEL CORRUPTION (ADDED ON TOP) =====
-  useEffect(() => {
-    if (!glitch) return;
-
-    const interval = setInterval(() => {
-      const newPixels = Array.from({ length: 8 }).map(() => ({
+      // pixel burst generator
+      const newPixels = Array.from({ length: 10 }).map(() => ({
         top: Math.random() * 100 + "%",
         left: Math.random() * 100 + "%",
-        width: Math.random() * 25 + 8 + "px",
+        width: Math.random() * 30 + 6 + "px",
         height: Math.random() * 6 + 2 + "px",
         color: [
-          "rgba(255,0,0,0.35)",
-          "rgba(0,255,255,0.35)",
-          "rgba(255,255,255,0.25)",
-          "rgba(255,255,0,0.2)",
+          "rgba(255,0,0,0.4)",
+          "rgba(0,255,255,0.4)",
+          "rgba(255,255,255,0.3)",
+          "rgba(255,255,0,0.25)",
         ][Math.floor(Math.random() * 4)],
       }));
 
       setPixels(newPixels);
 
-      setTimeout(() => setPixels([]), 180);
-    }, 500);
+      setTimeout(() => {
+        setGlitch(false);
+        setPixels([]);
+      }, 220);
+    }, 1200);
 
     return () => clearInterval(interval);
   }, [glitch]);
@@ -105,20 +97,20 @@ export default function Intro() {
       style={{
         ...styles.wrapper,
         transform: glitch
-          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 3 - 1}px)`
+          ? `translate(${Math.random() * 5 - 2.5}px, ${Math.random() * 2 - 1}px)`
           : "translate(0px,0px)",
         filter: glitch
-          ? "contrast(1.6) brightness(1.3) saturate(1.4)"
+          ? "contrast(1.7) brightness(1.3) saturate(1.5)"
           : "none",
       }}
     >
-      {/* OLD GLITCH OVERLAY */}
-      {glitch && <div style={styles.glitchOverlay} />}
-
-      {/* NEW PIXEL BLOCKS */}
+      {/* PIXEL BLOCKS */}
       {pixels.map((p, i) => (
         <div key={i} style={{ ...styles.pixel, ...p }} />
       ))}
+
+      {/* GLITCH OVERLAY */}
+      {glitch && <div style={styles.glitchOverlay} />}
 
       <div style={styles.container}>
         <pre style={styles.text}>
@@ -184,21 +176,20 @@ const styles = {
     animation: "glow 2s infinite alternate",
   },
 
+  pixel: {
+    position: "fixed",
+    zIndex: 999,
+    pointerEvents: "none",
+    opacity: 0.9,
+    filter: "blur(0.4px)",
+  },
+
   glitchOverlay: {
     position: "fixed",
     inset: 0,
     background:
-      "linear-gradient(90deg, rgba(255,255,255,0.04), transparent, rgba(255,255,255,0.03))",
+      "linear-gradient(90deg, rgba(255,255,255,0.05), transparent, rgba(255,255,255,0.03))",
     pointerEvents: "none",
-    zIndex: 999,
-    animation: "flicker 0.15s linear",
-  },
-
-  pixel: {
-    position: "fixed",
     zIndex: 998,
-    pointerEvents: "none",
-    opacity: 0.9,
-    filter: "blur(0.4px)",
   },
 };
