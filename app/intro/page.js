@@ -21,10 +21,10 @@ export default function Intro() {
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
 
-  const [glitchActive, setGlitchActive] = useState(false);
+  const [glitchOn, setGlitchOn] = useState(false);
   const [pixels, setPixels] = useState([]);
 
-  // ===== TYPEWRITER (UNCHANGED LOGIC) =====
+  // ================= TYPEWRITER =================
   useEffect(() => {
     if (lineIndex >= lines.length) {
       const t = setTimeout(() => setShowButton(true), 800);
@@ -51,68 +51,69 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // ===== GLITCH START (GUARANTEED AFTER 5s) =====
+  // ================= START GLITCH AFTER 5s =================
   useEffect(() => {
-    const start = setTimeout(() => {
-      setGlitchActive(true);
+    const t = setTimeout(() => {
+      setGlitchOn(true);
     }, 5000);
 
-    return () => clearTimeout(start);
+    return () => clearTimeout(t);
   }, []);
 
-  // ===== GLITCH ENGINE (CLEAN + STABLE) =====
+  // ================= GLITCH LOOP =================
   useEffect(() => {
-    if (!glitchActive) return;
+    if (!glitchOn) return;
 
     const interval = setInterval(() => {
-      // turn glitch ON
-      setGlitchActive(true);
+      setGlitchOn(true);
 
-      // generate pixel corruption
-      const newPixels = Array.from({ length: 12 }).map(() => ({
+      // VIBGYOR PIXELS
+      const newPixels = Array.from({ length: 14 }).map(() => ({
         top: Math.random() * 100 + "%",
         left: Math.random() * 100 + "%",
-        width: Math.random() * 40 + 10 + "px",
+        width: Math.random() * 35 + 8 + "px",
         height: Math.random() * 6 + 2 + "px",
         background: [
-          "rgba(255,0,0,0.5)",
-          "rgba(0,255,255,0.5)",
-          "rgba(255,255,255,0.3)",
-          "rgba(255,255,0,0.3)",
-        ][Math.floor(Math.random() * 4)],
+          "rgba(148,0,211,0.6)", // Violet
+          "rgba(75,0,130,0.6)",  // Indigo
+          "rgba(0,0,255,0.6)",   // Blue
+          "rgba(0,255,0,0.5)",   // Green
+          "rgba(255,255,0,0.5)", // Yellow
+          "rgba(255,127,0,0.5)", // Orange
+          "rgba(255,0,0,0.55)",  // Red
+        ][Math.floor(Math.random() * 7)],
       }));
 
       setPixels(newPixels);
 
-      // turn glitch OFF after burst
       setTimeout(() => {
-        setGlitchActive(false);
+        setGlitchOn(false);
         setPixels([]);
-      }, 200);
+      }, 180);
     }, 1200);
 
     return () => clearInterval(interval);
-  }, [glitchActive]);
+  }, [glitchOn]);
 
   return (
     <main
       style={{
         ...styles.wrapper,
-        transform: glitchActive
-          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
+        transform: glitchOn
+          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 3 - 1}px)`
           : "none",
-        filter: glitchActive
-          ? "contrast(1.7) brightness(1.3) saturate(1.4)"
+        filter: glitchOn
+          ? "contrast(1.7) brightness(1.4) saturate(1.6)"
           : "none",
       }}
     >
-      {/* PIXEL BLOCKS */}
+      {/* PIXEL CORRUPTION BLOCKS */}
       {pixels.map((p, i) => (
         <div key={i} style={{ ...styles.pixel, ...p }} />
       ))}
 
-      {/* subtle overlay */}
-      {glitchActive && <div style={styles.overlay} />}
+      {/* GLITCH OVERLAY */}
+      {glitchOn && <div style={styles.overlay} />}
 
       <div style={styles.container}>
         <pre style={styles.text}>
@@ -147,7 +148,6 @@ const styles = {
 
   container: {
     maxWidth: "800px",
-    textAlign: "left",
     position: "relative",
     zIndex: 2,
   },
@@ -165,7 +165,7 @@ const styles = {
   buttonWrapper: {
     marginTop: "50px",
     textAlign: "center",
-    animation: "spawn 1.2s ease-out",
+    animation: "spawn 1s ease-out",
   },
 
   button: {
@@ -182,7 +182,7 @@ const styles = {
     position: "fixed",
     zIndex: 999,
     pointerEvents: "none",
-    opacity: 0.9,
+    opacity: 0.95,
     filter: "blur(0.4px)",
   },
 
