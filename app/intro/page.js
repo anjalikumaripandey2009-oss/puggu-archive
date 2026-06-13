@@ -20,6 +20,7 @@ export default function Intro() {
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
+
   const [glitch, setGlitch] = useState(false);
 
   // TYPEWRITER
@@ -49,14 +50,15 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // GLITCH EFFECT (LIGHTWEIGHT)
+  // CONSTANT GLITCH EVERY 10 SECONDS
   useEffect(() => {
     const interval = setInterval(() => {
-      if (Math.random() < 0.25) {
-        setGlitch(true);
-        setTimeout(() => setGlitch(false), 120);
-      }
-    }, 2000);
+      setGlitch(true);
+
+      setTimeout(() => {
+        setGlitch(false);
+      }, 300); // glitch duration
+    }, 10000); // every 10 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -65,8 +67,12 @@ export default function Intro() {
     <main
       style={{
         ...styles.wrapper,
-        transform: glitch ? "translateX(2px)" : "translateX(0px)",
-        filter: glitch ? "contrast(1.2) brightness(1.1)" : "none",
+        transform: glitch
+          ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 2 - 1}px)`
+          : "translate(0px, 0px)",
+        filter: glitch
+          ? "contrast(1.6) brightness(1.4)"
+          : "none",
       }}
     >
       {glitch && <div style={styles.glitchOverlay} />}
@@ -190,9 +196,10 @@ const styles = {
     left: 0,
     width: "100%",
     height: "100%",
-    background: "rgba(255,255,255,0.03)",
+    background:
+      "linear-gradient(90deg, rgba(255,255,255,0.05), transparent, rgba(255,255,255,0.03))",
     pointerEvents: "none",
     zIndex: 999,
-    animation: "flicker 0.1s linear",
+    animation: "flicker 0.15s linear",
   },
 };
