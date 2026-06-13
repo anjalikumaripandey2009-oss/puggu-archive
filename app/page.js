@@ -12,20 +12,20 @@ export default function Home() {
         fontFamily: "monospace",
       }}
     >
-      <Link href="/intro">
-        <div
-          style={{
-            padding: "18px 36px",
-            border: "1px solid white",
-            color: "white",
-            fontSize: "1.2rem",
-            letterSpacing: "2px",
-            cursor: "pointer",
-            userSelect: "none",
-          }}
-        >
-          START BDAY SIMULATION
-        </div>
+      <Link
+        href="/intro"
+        style={{
+          padding: "18px 36px",
+          border: "1px solid white",
+          color: "white",
+          fontSize: "1.2rem",
+          letterSpacing: "2px",
+          textDecoration: "none",
+          display: "inline-block",
+          cursor: "pointer",
+        }}
+      >
+        START BDAY SIMULATION
       </Link>
     </main>
   );
