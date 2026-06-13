@@ -6,20 +6,19 @@ export default function Home() {
       style={{
         minHeight: "100vh",
         background: "black",
-        color: "white",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        fontFamily: "monospace",
       }}
     >
       <Link
         href="/intro"
         style={{
-          padding: "18px 40px",
-          border: "1px solid white",
           color: "white",
           textDecoration: "none",
+          border: "1px solid white",
+          padding: "18px 36px",
+          fontFamily: "monospace",
           fontSize: "1.2rem",
           letterSpacing: "2px",
         }}
