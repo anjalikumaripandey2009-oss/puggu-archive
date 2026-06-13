@@ -21,10 +21,13 @@ export default function Intro() {
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
 
+  // OLD GLITCH (kept)
   const [glitch, setGlitch] = useState(false);
-  const [startGlitch, setStartGlitch] = useState(false);
 
-  // TYPEWRITER
+  // NEW PIXEL CORRUPTION
+  const [pixels, setPixels] = useState([]);
+
+  // ===== TYPEWRITER =====
   useEffect(() => {
     if (lineIndex >= lines.length) {
       const t = setTimeout(() => setShowButton(true), 800);
@@ -51,30 +54,51 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // START GLITCH AFTER 5 SECONDS
+  // ===== OLD GLITCH (KEPT SAME BEHAVIOR) =====
   useEffect(() => {
     const t = setTimeout(() => {
-      setStartGlitch(true);
+      setGlitch(true);
     }, 5000);
 
     return () => clearTimeout(t);
   }, []);
 
-  // RANDOM GLITCH WHILE TYPING (only after 5s)
   useEffect(() => {
-    if (!startGlitch) return;
+    if (!glitch) return;
 
     const interval = setInterval(() => {
-      const chance = Math.random();
-
-      if (chance < 0.7) {
-        setGlitch(true);
-        setTimeout(() => setGlitch(false), 150);
-      }
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 150);
     }, 800);
 
     return () => clearInterval(interval);
-  }, [startGlitch]);
+  }, [glitch]);
+
+  // ===== NEW PIXEL CORRUPTION (ADDED ON TOP) =====
+  useEffect(() => {
+    if (!glitch) return;
+
+    const interval = setInterval(() => {
+      const newPixels = Array.from({ length: 8 }).map(() => ({
+        top: Math.random() * 100 + "%",
+        left: Math.random() * 100 + "%",
+        width: Math.random() * 25 + 8 + "px",
+        height: Math.random() * 6 + 2 + "px",
+        color: [
+          "rgba(255,0,0,0.35)",
+          "rgba(0,255,255,0.35)",
+          "rgba(255,255,255,0.25)",
+          "rgba(255,255,0,0.2)",
+        ][Math.floor(Math.random() * 4)],
+      }));
+
+      setPixels(newPixels);
+
+      setTimeout(() => setPixels([]), 180);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [glitch]);
 
   return (
     <main
@@ -84,13 +108,17 @@ export default function Intro() {
           ? `translate(${Math.random() * 6 - 3}px, ${Math.random() * 3 - 1}px)`
           : "translate(0px,0px)",
         filter: glitch
-          ? "contrast(1.8) brightness(1.3) saturate(1.5)"
+          ? "contrast(1.6) brightness(1.3) saturate(1.4)"
           : "none",
       }}
     >
-      {/* PIXEL GLITCH LAYERS */}
-      {glitch && <div style={styles.noise} />}
-      {glitch && <div style={styles.rgbSplit} />}
+      {/* OLD GLITCH OVERLAY */}
+      {glitch && <div style={styles.glitchOverlay} />}
+
+      {/* NEW PIXEL BLOCKS */}
+      {pixels.map((p, i) => (
+        <div key={i} style={{ ...styles.pixel, ...p }} />
+      ))}
 
       <div style={styles.container}>
         <pre style={styles.text}>
@@ -156,26 +184,21 @@ const styles = {
     animation: "glow 2s infinite alternate",
   },
 
-  /* ===== GLITCH EFFECTS ===== */
-
-  noise: {
+  glitchOverlay: {
     position: "fixed",
     inset: 0,
     background:
-      "repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, transparent 2px)",
-    opacity: 0.2,
+      "linear-gradient(90deg, rgba(255,255,255,0.04), transparent, rgba(255,255,255,0.03))",
     pointerEvents: "none",
     zIndex: 999,
+    animation: "flicker 0.15s linear",
   },
 
-  rgbSplit: {
+  pixel: {
     position: "fixed",
-    inset: 0,
-    background:
-      "linear-gradient(90deg, rgba(255,0,0,0.08), rgba(0,255,255,0.08), rgba(255,255,255,0.05))",
-    mixBlendMode: "screen",
-    opacity: 0.25,
-    pointerEvents: "none",
     zIndex: 998,
+    pointerEvents: "none",
+    opacity: 0.9,
+    filter: "blur(0.4px)",
   },
 };
