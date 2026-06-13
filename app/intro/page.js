@@ -15,7 +15,7 @@ const lines = [
   "SUBJECT: PUGGU",
 ];
 
-// ================= CANVAS BACKGROUND =================
+// ================= BACKGROUND (FIXED BIG PARTICLES) =================
 function Background() {
   const canvasRef = useRef(null);
 
@@ -26,21 +26,26 @@ function Background() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const particles = Array.from({ length: 70 }).map(() => ({
+    // 🔥 BIG + VISIBLE PARTICLES (FIXED)
+    const particles = Array.from({ length: 60 }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      size: Math.random() * 3 + 2,
-      color: Math.random() > 0.5
-        ? "rgba(0,255,255,0.8)"
-        : "rgba(255,255,255,0.6)",
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+
+      // ⭐ FIX: bigger visible particles
+      size: Math.random() * 6 + 4, // 4px → 10px
+
+      color:
+        Math.random() > 0.5
+          ? "rgba(0,255,255,0.9)"
+          : "rgba(255,255,255,0.85)",
     }));
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
 
-      // dark background
+      // dark base
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, width, height);
 
@@ -48,17 +53,20 @@ function Background() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // wrap
+        // wrap around screen
         if (p.x < 0) p.x = width;
         if (p.x > width) p.x = 0;
         if (p.y < 0) p.y = height;
         if (p.y > height) p.y = 0;
 
-        // draw particle
+        // 🔥 DRAW GLOWING ORBS
         ctx.beginPath();
         ctx.fillStyle = p.color;
-        ctx.shadowBlur = 10;
+
+        ctx.shadowBlur = 20;
         ctx.shadowColor = p.color;
+
+        ctx.globalAlpha = 0.95;
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
       }
@@ -74,7 +82,6 @@ function Background() {
     };
 
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -90,7 +97,7 @@ function Background() {
   );
 }
 
-// ================= MAIN =================
+// ================= MAIN INTRO =================
 export default function Intro() {
   const [text, setText] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -127,7 +134,7 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
-  // GLITCH SYSTEM (STABLE)
+  // GLITCH SYSTEM
   useEffect(() => {
     const start = setTimeout(() => {
       const interval = setInterval(() => {
@@ -165,7 +172,7 @@ export default function Intro() {
 
   return (
     <main style={styles.wrapper}>
-      {/* 🌌 BACKGROUND CANVAS */}
+      {/* BACKGROUND */}
       <Background />
 
       {/* PIXELS */}
