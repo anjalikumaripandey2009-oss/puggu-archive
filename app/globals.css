@@ -28,3 +28,9 @@
   50% { opacity: 1; transform: scale(1.2); }
   100% { opacity: 0.2; transform: scale(0.8); }
 }
+
+@keyframes flicker {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}

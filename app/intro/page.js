@@ -20,7 +20,9 @@ export default function Intro() {
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
+  const [glitch, setGlitch] = useState(false);
 
+  // TYPEWRITER
   useEffect(() => {
     if (lineIndex >= lines.length) {
       const t = setTimeout(() => setShowButton(true), 800);
@@ -33,7 +35,7 @@ export default function Intro() {
       const t = setTimeout(() => {
         setText((prev) => prev + currentLine[charIndex]);
         setCharIndex(charIndex + 1);
-      }, 25);
+      }, 28);
 
       return () => clearTimeout(t);
     } else {
@@ -47,8 +49,28 @@ export default function Intro() {
     }
   }, [charIndex, lineIndex]);
 
+  // GLITCH EFFECT (LIGHTWEIGHT)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() < 0.25) {
+        setGlitch(true);
+        setTimeout(() => setGlitch(false), 120);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <main style={styles.wrapper}>
+    <main
+      style={{
+        ...styles.wrapper,
+        transform: glitch ? "translateX(2px)" : "translateX(0px)",
+        filter: glitch ? "contrast(1.2) brightness(1.1)" : "none",
+      }}
+    >
+      {glitch && <div style={styles.glitchOverlay} />}
+
       <div style={styles.container}>
         <pre style={styles.text}>
           {text}
@@ -57,7 +79,6 @@ export default function Intro() {
 
         {showButton && (
           <div style={styles.buttonWrapper}>
-            {/* simple built-in sparkles */}
             <div style={styles.sparkles}>
               <span style={styles.spark1}></span>
               <span style={styles.spark2}></span>
@@ -84,6 +105,7 @@ const styles = {
     alignItems: "center",
     fontFamily: "monospace",
     padding: "20px",
+    transition: "transform 0.1s ease",
   },
 
   container: {
@@ -104,8 +126,8 @@ const styles = {
   buttonWrapper: {
     marginTop: "50px",
     textAlign: "center",
-    animation: "spawn 1.2s ease-out",
     position: "relative",
+    animation: "spawn 1.2s ease-out",
   },
 
   button: {
@@ -160,5 +182,17 @@ const styles = {
     top: "15px",
     left: "70%",
     animation: "twinkle 1.4s infinite",
+  },
+
+  glitchOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(255,255,255,0.03)",
+    pointerEvents: "none",
+    zIndex: 999,
+    animation: "flicker 0.1s linear",
   },
 };
