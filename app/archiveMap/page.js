@@ -127,13 +127,13 @@ export default function ArchiveMap() {
   )}
 
   {planet.type === "gas" && (
-    <>
-      <div style={styles.band1}></div>
-      <div style={styles.band2}></div>
-      <div style={styles.band3}></div>
-    </>
-  )}
-
+  <>
+    <div style={styles.ring}></div>
+    <div style={styles.band1}></div>
+    <div style={styles.band2}></div>
+    <div style={styles.band3}></div>
+  </>
+)}
   {planet.type === "earth" && (
     <>
       <div style={styles.continent1}></div>
@@ -175,11 +175,15 @@ const styles = {
   },
 
   stars: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "radial-gradient(circle at center, #07101d 0%, #000 75%)",
-  },
+  position: "absolute",
+  inset: 0,
+  background: `
+    radial-gradient(circle at 20% 20%, rgba(140,0,255,.18), transparent 25%),
+    radial-gradient(circle at 80% 30%, rgba(0,120,255,.18), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(255,0,150,.12), transparent 30%),
+    radial-gradient(circle at center, #07101d 0%, #000 75%)
+  `,
+},
 
   core: {
     position: "absolute",
@@ -220,14 +224,16 @@ const styles = {
   },
 
   label: {
-    marginBottom: "12px",
-    fontSize: "12px",
-    letterSpacing: "2px",
-  },
+  marginBottom: "14px",
+  fontSize: "12px",
+  letterSpacing: "3px",
+  color: "#d8faff",
+  textShadow: "0 0 8px cyan",
+},
 
   planet: {
-    width: "100px",
-    height: "100px",
+    width: "120px",
+    height: "120px",
 
     borderRadius: "50%",
 
@@ -240,7 +246,7 @@ const styles = {
     border: "1px solid rgba(255,255,255,0.15)",
 
     boxShadow:
-      "0 0 20px rgba(255,255,255,0.25), 0 0 60px rgba(255,255,255,0.12)",
+  "0 0 30px rgba(255,255,255,.35), 0 0 80px rgba(255,255,255,.15)",
 
     transition: "0.3s",
   },
@@ -391,5 +397,15 @@ cloud2:{
  borderRadius:"50%",
  top:"55px",
  left:"35px"
+},
+ring:{
+ position:"absolute",
+ width:"140px",
+ height:"32px",
+ border:"3px solid rgba(255,255,255,.35)",
+ borderRadius:"50%",
+ top:"34px",
+ left:"-20px",
+ transform:"rotate(-20deg)",
 },
 };
