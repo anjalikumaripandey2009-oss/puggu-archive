@@ -243,7 +243,7 @@ const styles = {
 
     position: "relative",
 
-    overflow: "hidden",
+    overflow: "visible",
 
     border: "1px solid rgba(255,255,255,0.15)",
 
@@ -285,8 +285,8 @@ const styles = {
   },
 ice1:{
  position:"absolute",
- width:"60px",
- height:"2px",
+ width:"75px",
+ height:"3px",
  background:"rgba(255,255,255,.5)",
  transform:"rotate(25deg)",
  top:"40px",
@@ -295,30 +295,40 @@ ice1:{
 
 ice2:{
  position:"absolute",
- width:"45px",
- height:"2px",
+ width:"60px",
+ height:"3px",
  background:"rgba(255,255,255,.4)",
  transform:"rotate(-30deg)",
  top:"55px",
  left:"25px"
 },
 
+ice3:{
+ position:"absolute",
+ width:"55px",
+ height:"2px",
+ background:"rgba(255,255,255,.35)",
+ transform:"rotate(55deg)",
+ top:"25px",
+ left:"30px"
+},
+
 circuit1:{
  position:"absolute",
- width:"50px",
+ width:"65px",
  height:"3px",
  background:"#00ffff",
  top:"30px",
- left:"20px"
+ left:"15px"
 },
 
 circuit2:{
  position:"absolute",
  width:"3px",
- height:"40px",
+ height:"55px",
  background:"#00ffff",
- top:"30px",
- left:"45px"
+ top:"20px",
+ left:"47px"
 },
 
 lava1:{
@@ -335,6 +345,26 @@ lava2:{
  height:"10px",
  background:"rgba(255,255,0,.2)",
  top:"60px"
+},
+
+lava3:{
+ position:"absolute",
+ width:"18px",
+ height:"18px",
+ borderRadius:"50%",
+ background:"rgba(255,255,0,.3)",
+ top:"35px",
+ left:"65px"
+},
+
+lava4:{
+ position:"absolute",
+ width:"12px",
+ height:"12px",
+ borderRadius:"50%",
+ background:"rgba(255,255,0,.25)",
+ top:"70px",
+ left:"30px"
 },
 
 band1:{
@@ -366,7 +396,7 @@ continent1:{
  width:"35px",
  height:"20px",
  background:"rgba(0,100,0,.5)",
- borderRadius:"50%",
+ borderRadius:"40% 60% 50% 70%",
  top:"35px",
  left:"18px"
 },
@@ -376,7 +406,7 @@ continent2:{
  width:"28px",
  height:"18px",
  background:"rgba(0,100,0,.5)",
- borderRadius:"50%",
+ borderRadius:"40% 60% 50% 70%",
  top:"60px",
  left:"50px"
 },
@@ -400,15 +430,27 @@ cloud2:{
  top:"55px",
  left:"35px"
 },
+
+cloud3:{
+ position:"absolute",
+ width:"35px",
+ height:"15px",
+ background:"rgba(255,255,255,.08)",
+ borderRadius:"50%",
+ top:"45px",
+ left:"45px"
+},
+
 ring:{
  position:"absolute",
- width:"180px",
- height:"50px",
+ width:"190px",
+ height:"55px",
  border:"4px solid rgba(255,255,255,.45)",
  borderRadius:"50%",
- top:"35px",
- left:"-30px",
+ top:"32px",
+ left:"-35px",
  transform:"rotate(-20deg)",
  boxShadow:"0 0 15px rgba(255,255,255,.25)",
+ zIndex:-1,
 },
 };
