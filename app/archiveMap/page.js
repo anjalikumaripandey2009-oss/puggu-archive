@@ -232,6 +232,7 @@ const styles = {
   textAlign: "center",
   zIndex: 3,
   width: "120px",
+  height: "120px",
 },
 
   label: {
@@ -464,22 +465,21 @@ cloud3:{
 
 ring:{
  position:"absolute",
- width:"180px",
- height:"38px",
 
- top:"41px",
- left:"-30px",
+ width:"185px",
+ height:"50px",
 
+ top:"35px",
+ left:"-32px",
+
+ border:"3px solid rgba(255,255,255,.55)",
  borderRadius:"50%",
-
- background:
-  "linear-gradient(to right, transparent 0%, rgba(255,255,255,.15) 10%, rgba(255,255,255,.55) 50%, rgba(255,255,255,.15) 90%, transparent 100%)",
 
  transform:"rotate(-20deg)",
 
- boxShadow:"0 0 8px rgba(255,255,255,.15)",
+ boxShadow:"0 0 12px rgba(255,255,255,.25)",
 
- zIndex:0,
+ zIndex:1,
  pointerEvents:"none",
 },
 };
