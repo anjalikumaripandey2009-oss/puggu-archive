@@ -227,11 +227,12 @@ const styles = {
   },
 
   planetContainer: {
-    position: "absolute",
-    transform: "translate(-50%, -50%)",
-    textAlign: "center",
-    zIndex: 3,
-  },
+  position: "absolute",
+  transform: "translate(-50%, -50%)",
+  textAlign: "center",
+  zIndex: 3,
+  width: "120px",
+},
 
   label: {
   marginBottom: "14px",
@@ -471,6 +472,7 @@ ring:{
  left:"-35px",
  transform:"rotate(-20deg)",
  boxShadow:"0 0 15px rgba(255,255,255,.25)",
- zIndex:-1,
+ zIndex:0,
+ pointerEvents:"none",
 },
 };
