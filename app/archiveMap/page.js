@@ -229,8 +229,10 @@ const styles = {
   letterSpacing: "3px",
   color: "#d8faff",
   textShadow: "0 0 8px cyan",
+  width: "180px",
+  marginLeft: "-30px",
+  textAlign: "center",
 },
-
   planet: {
     width: "120px",
     height: "120px",
@@ -400,12 +402,13 @@ cloud2:{
 },
 ring:{
  position:"absolute",
- width:"140px",
- height:"32px",
- border:"3px solid rgba(255,255,255,.35)",
+ width:"180px",
+ height:"50px",
+ border:"4px solid rgba(255,255,255,.45)",
  borderRadius:"50%",
- top:"34px",
- left:"-20px",
+ top:"35px",
+ left:"-30px",
  transform:"rotate(-20deg)",
+ boxShadow:"0 0 15px rgba(255,255,255,.25)",
 },
 };
