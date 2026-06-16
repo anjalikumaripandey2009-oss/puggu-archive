@@ -466,18 +466,18 @@ cloud3:{
 ring:{
  position:"absolute",
 
- width:"185px",
- height:"50px",
+ width:"170px",
+ height:"40px",
 
- top:"35px",
- left:"-32px",
+ left:"50%",
+ top:"50%",
 
- border:"3px solid rgba(255,255,255,.55)",
+ transform:"translate(-50%, -50%) rotate(-20deg)",
+
+ border:"3px solid rgba(255,255,255,.45)",
  borderRadius:"50%",
 
- transform:"rotate(-20deg)",
-
- boxShadow:"0 0 12px rgba(255,255,255,.25)",
+ boxShadow:"0 0 10px rgba(255,255,255,.2)",
 
  zIndex:1,
  pointerEvents:"none",
