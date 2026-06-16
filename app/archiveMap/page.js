@@ -105,14 +105,6 @@ export default function ArchiveMap() {
     ...styles.planet,
     background: planet.color,
   }}
-></Link>
-
-          <Link
-  href={planet.href}
-  style={{
-    ...styles.planet,
-    background: planet.color,
-  }}
 >
   <div style={styles.shadow}></div>
   {planet.type === "gas" && (
