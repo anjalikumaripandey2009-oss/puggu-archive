@@ -95,6 +95,17 @@ export default function ArchiveMap() {
           }}
         >
           <div style={styles.label}>{planet.name}</div>
+          {planet.type === "gas" && (
+  <div style={styles.ring}></div>
+)}
+
+<Link
+  href={planet.href}
+  style={{
+    ...styles.planet,
+    background: planet.color,
+  }}
+></Link>
 
           <Link
   href={planet.href}
@@ -104,12 +115,20 @@ export default function ArchiveMap() {
   }}
 >
   <div style={styles.shadow}></div>
+  {planet.type === "gas" && (
+  <>
+    <div style={styles.band1}></div>
+    <div style={styles.band2}></div>
+    <div style={styles.band3}></div>
+  </>
+)}
 
   {planet.type === "ice" && (
     <>
       <div style={styles.ice1}></div>
       <div style={styles.ice2}></div>
       <div style={styles.ice3}></div>
+      <div style={styles.ice4}></div>
     </>
   )}
 
@@ -129,14 +148,8 @@ export default function ArchiveMap() {
     </>
   )}
 
-  {planet.type === "gas" && (
-  <>
-    <div style={styles.ring}></div>
-    <div style={styles.band1}></div>
-    <div style={styles.band2}></div>
-    <div style={styles.band3}></div>
-  </>
-)}
+  
+
   {planet.type === "earth" && (
     <>
       <div style={styles.continent1}></div>
@@ -153,6 +166,7 @@ export default function ArchiveMap() {
   )}
 
   <div style={styles.highlight}></div>
+  
 </Link>
         </div>
       ))}
@@ -247,7 +261,7 @@ const styles = {
 
     position: "relative",
 
-    overflow: "visible",
+    overflow: "hidden",
 
     border: "1px solid rgba(255,255,255,0.15)",
 
@@ -305,6 +319,16 @@ ice2:{
  transform:"rotate(-30deg)",
  top:"55px",
  left:"25px"
+},
+
+ice4:{
+ position:"absolute",
+ width:"40px",
+ height:"2px",
+ background:"rgba(255,255,255,.3)",
+ transform:"rotate(-65deg)",
+ top:"50px",
+ left:"45px"
 },
 
 ice3:{
