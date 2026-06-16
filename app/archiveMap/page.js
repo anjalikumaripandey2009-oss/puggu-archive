@@ -52,6 +52,25 @@ const planets = [
 ];
 
 export default function ArchiveMap() {
+  <style jsx>{`
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counterOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+`}</style>
   return (
     <main style={styles.page}>
       <div style={styles.spaceGlow}></div>
@@ -87,12 +106,14 @@ export default function ArchiveMap() {
       {/* Planets */}
       {planets.map((planet) => (
         <div
-          key={planet.name}
-          style={{
-            ...styles.planetContainer,
-            top: planet.top,
-            left: planet.left,
-          }}
+  key={planet.name}
+  style={{
+    ...styles.planetContainer,
+    top: planet.top,
+    left: planet.left,
+    animation: "orbit 120s linear infinite",
+  }}
+
         >
           <div style={styles.label}>{planet.name}</div>
           
@@ -101,6 +122,7 @@ export default function ArchiveMap() {
   style={{
     ...styles.planet,
     background: planet.color,
+    animation: "counterOrbit 120s linear infinite",
   }}
 >
   <div style={styles.shadow}></div>
@@ -229,7 +251,7 @@ const styles = {
   textAlign: "center",
   zIndex: 3,
   width: "120px",
-  height: "120px",
+  animation: "drift 6s ease-in-out infinite",
 },
 
   label: {
