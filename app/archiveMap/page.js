@@ -109,6 +109,7 @@ export default function ArchiveMap() {
     <>
       <div style={styles.ice1}></div>
       <div style={styles.ice2}></div>
+      <div style={styles.ice3}></div>
     </>
   )}
 
@@ -123,6 +124,8 @@ export default function ArchiveMap() {
     <>
       <div style={styles.lava1}></div>
       <div style={styles.lava2}></div>
+      <div style={styles.lava3}></div>
+      <div style={styles.lava4}></div>
     </>
   )}
 
@@ -145,6 +148,7 @@ export default function ArchiveMap() {
     <>
       <div style={styles.cloud1}></div>
       <div style={styles.cloud2}></div>
+      <div style={styles.cloud3}></div>
     </>
   )}
 
