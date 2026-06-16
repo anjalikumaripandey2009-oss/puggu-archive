@@ -96,7 +96,7 @@ export default function ArchiveMap() {
         >
           <div style={styles.label}>{planet.name}</div>
           {planet.type === "gas" && (
-  <div style={styles.ringBack}></div>
+  <div style={styles.ring}></div>
 )}
 
 <Link
@@ -158,9 +158,7 @@ export default function ArchiveMap() {
   )}
 
   <div style={styles.highlight}></div>
-{planet.type === "gas" && (
-  <div style={styles.ringFront}></div>
-)}  
+  
 </Link>
         </div>
       ))}
@@ -464,26 +462,24 @@ cloud3:{
  left:"45px"
 },
 
-ringBack:{
+ring:{
  position:"absolute",
  width:"180px",
  height:"38px",
+
  top:"41px",
  left:"-30px",
+
  borderRadius:"50%",
- border:"3px solid rgba(255,255,255,.35)",
+
+ background:
+  "linear-gradient(to right, transparent 0%, rgba(255,255,255,.15) 10%, rgba(255,255,255,.55) 50%, rgba(255,255,255,.15) 90%, transparent 100%)",
+
  transform:"rotate(-20deg)",
+
+ boxShadow:"0 0 8px rgba(255,255,255,.15)",
+
  zIndex:0,
-},
-ringFront:{
- position:"absolute",
- width:"180px",
- height:"38px",
- top:"41px",
- left:"-30px",
- borderRadius:"50%",
- borderBottom:"3px solid rgba(255,255,255,.55)",
- transform:"rotate(-20deg)",
+ pointerEvents:"none",
 },
 };
-
