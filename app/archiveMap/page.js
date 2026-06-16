@@ -1,5 +1,7 @@
 import Link from "next/link";
-
+const unlockedPlanets = [
+  "GENESIS PROTOCOL",
+];
 const planets = [
  {
   name: "GENESIS PROTOCOL",
@@ -104,16 +106,19 @@ export default function ArchiveMap() {
       </div>
 
       {/* Planets */}
-      {planets.map((planet) => (
-        <div
-  key={planet.name}
-  style={{
-    ...styles.planetContainer,
-    top: planet.top,
-    left: planet.left,
-    animation: "orbit 120s linear infinite",
-  }}
+      {planets.map((planet) => {
 
+  const isUnlocked = unlockedPlanets.includes(planet.name);
+
+  return (
+    <div
+      key={planet.name}
+      style={{
+        ...styles.planetContainer,
+        top: planet.top,
+        left: planet.left,
+      }}
+    
         >
           <div style={styles.label}>{planet.name}</div>
           
@@ -180,7 +185,8 @@ export default function ArchiveMap() {
   
 </Link>
         </div>
-      ))}
+  );
+})}
     </main>
   );
 }
