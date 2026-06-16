@@ -95,10 +95,7 @@ export default function ArchiveMap() {
           }}
         >
           <div style={styles.label}>{planet.name}</div>
-          {planet.type === "gas" && (
-  <div style={styles.ring}></div>
-)}
-
+          
 <Link
   href={planet.href}
   style={{
@@ -461,25 +458,5 @@ cloud3:{
  borderRadius:"50%",
  top:"45px",
  left:"45px"
-},
-
-ring:{
- position:"absolute",
-
- width:"170px",
- height:"40px",
-
- left:"50%",
- top:"50%",
-
- transform:"translate(-50%, -50%) rotate(-20deg)",
-
- border:"3px solid rgba(255,255,255,.45)",
- borderRadius:"50%",
-
- boxShadow:"0 0 10px rgba(255,255,255,.2)",
-
- zIndex:1,
- pointerEvents:"none",
 },
 };
