@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 const unlockedPlanets = [
   "GENESIS PROTOCOL",
 ];
@@ -54,6 +55,17 @@ const planets = [
 ];
 
 export default function ArchiveMap() {
+  const [unlockedPlanets, setUnlockedPlanets] = useState([
+  "GENESIS PROTOCOL",
+]);
+
+useEffect(() => {
+  const saved = localStorage.getItem("pugguUnlocks");
+
+  if (saved) {
+    setUnlockedPlanets(JSON.parse(saved));
+  }
+}, []);
   <style jsx>{`
 @keyframes orbit {
   from {
